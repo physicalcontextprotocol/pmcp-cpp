@@ -226,7 +226,7 @@ def python_sdk_case(root: str, cpp_client: str, label: str) -> None:
 # --------------------------------------------------------------------------
 
 
-def cpp_server_case(cpp_server: str, root: str, label: str) -> None:
+def cpp_server_case(cpp_server: str, root: str, label: str, have_sdk: bool) -> None:
     say(f"  -> pmcp-python client vs C++ server ({label})")
     with http_server([cpp_server, "--port={PORT}"]) as (proc, url):
         path = wait_http(url, ("/pcp", "/mcp", "/"), proc)
@@ -308,6 +308,12 @@ def cpp_server_case(cpp_server: str, root: str, label: str) -> None:
     if not os.path.isfile(probe):
         R.skip(f"sdk-client->cpp ({label})", "probe script missing")
         return
+    # The raw RPC cases above need nothing but the C++ server, so they still
+    # run without the sibling SDKs. The real PCPClient probe imports v05 from
+    # pmcp-python and cannot run without it — that is a skip, not a failure.
+    if not have_sdk:
+        R.skip(f"sdk-client->cpp ({label})", "pmcp-python/v05 not present or not importable")
+        return
     say(f"  -> v05 PCPClient vs C++ server ({label})")
     with http_server([cpp_server, "--port={PORT}"]) as (proc, url):
         path = wait_http(url, ("/pcp", "/mcp", "/"), proc)
@@ -342,7 +348,7 @@ def main() -> int:
     if not ok_sdk:
         R.skip("all cross-SDK cases", why)
     if not args.only or "pcp" in args.only:
-        cpp_server_case(args.cpp_server, args.pmcp_root, "pmcp-python/pcp")
+        cpp_server_case(args.cpp_server, args.pmcp_root, "pmcp-python/pcp", ok_sdk)
     if ok_sdk and (not args.only or "client" in args.only):
         try:
             python_sdk_case(args.pmcp_root, args.cpp_client, "pmcp-python/pcp")
