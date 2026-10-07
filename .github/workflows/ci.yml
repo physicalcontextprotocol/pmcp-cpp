@@ -10,6 +10,10 @@ name: pmcp-cpp CI
 # cross-implementation behaviour, which is why it is re-run locally on the
 # release machine (see LIMITATIONS.md). The unit suite and the build are the
 # CI gate; they fail the job for real.
+#
+# Releases are created by the org's publish-repos.sh (Step 8), which appends
+# the LIMITATIONS.md link and gates on CI. No release job lives here, so tags
+# cannot double-fire a GitHub release that conflicts with that script.
 
 on:
   push:
@@ -48,21 +52,3 @@ jobs:
           name: ctest-log
           path: build/Testing/Temporary/LastTest.log
           if-no-files-found: ignore
-
-  release:
-    name: Create GitHub release
-    runs-on: ubuntu-latest
-    needs: [build-and-test]
-    if: startsWith(github.ref, 'refs/tags/v')
-    permissions:
-      contents: write
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          generate_release_notes: true
-          draft: false
-          prerelease: ${{ contains(github.ref, 'alpha') || contains(github.ref, 'beta') || contains(github.ref, 'rc') }}
