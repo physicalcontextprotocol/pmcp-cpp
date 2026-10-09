@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(pmcp_cpp VERSION 1.0.0 LANGUAGES CXX)
+project(pmcp_cpp VERSION 1.0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -143,9 +143,43 @@ install(TARGETS pmcp EXPORT pmcpTargets
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(DIRECTORY include/pmcp DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
+# ---------------------------------------------------------------------------
+# CMake package config so downstream `find_package(pmcp)` works
+# ---------------------------------------------------------------------------
+# The EXPORT set above was declared but never installed, and no Config file was
+# generated, so `find_package(pmcp)` failed and the README's "with CMake package
+# targets" claim was not true. Install the export and a package config so
+# consumers can `find_package(pmcp REQUIRED)` and link `pmcp::pmcp`. This is also
+# what a vcpkg/Conan port's config-fixup step expects to find.
+
+include(CMakePackageConfigHelpers)
+set(PMCP_CMAKE_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/pmcp)
+
+install(EXPORT pmcpTargets
+  FILE pmcpTargets.cmake
+  NAMESPACE pmcp::
+  DESTINATION ${PMCP_CMAKE_INSTALL_DIR})
+
+configure_package_config_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/pmcpConfig.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/pmcpConfig.cmake
+  INSTALL_DESTINATION ${PMCP_CMAKE_INSTALL_DIR})
+
+write_basic_package_version_file(
+  ${CMAKE_CURRENT_BINARY_DIR}/pmcpConfigVersion.cmake
+  VERSION ${PROJECT_VERSION}
+  COMPATIBILITY SameMajorVersion)
+
+install(FILES
+  ${CMAKE_CURRENT_BINARY_DIR}/pmcpConfig.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/pmcpConfigVersion.cmake
+  DESTINATION ${PMCP_CMAKE_INSTALL_DIR})
+
 # ament_index_python looks for this at <prefix>/share/ament_index/resource_index.
 # Only meaningful with ROS 2 on, but harmless to ship unconditionally so an
-# installed prefix is complete either way.
-install(FILES ros2/pmcp_ros2_plugin.xml DESTINATION share/ament_index/resource_index/$(PROJECT_NAME))
+# installed prefix is complete either way. The ros2/ packaging files are not in
+# this repository, so both installs are OPTIONAL — without that, `cmake --install`
+# aborts on the missing plugin.xml and nothing installs at all.
+install(FILES ros2/pmcp_ros2_plugin.xml DESTINATION share/ament_index/resource_index/$(PROJECT_NAME) OPTIONAL)
 install(FILES ros2/launch/pmcp_bridge.launch.py
         DESTINATION share/${PROJECT_NAME}/launch OPTIONAL)

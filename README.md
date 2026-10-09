@@ -92,8 +92,15 @@ Options:
 - `-DPMCP_BUILD_EXAMPLES=OFF` — skip the example programs
 - `-DPMCP_WITH_ROS2=ON` — build the ROS 2 bridge (requires a ROS 2 install)
 
-Install: `cmake --install build` exports the `pmcp` static library and the
-`include/pmcp` headers (with CMake package targets).
+Install: `cmake --install build` exports the `pmcp` static library, the
+`include/pmcp` headers, and a CMake package. Downstream projects can then:
+
+```cmake
+find_package(pmcp REQUIRED)
+target_link_libraries(your_target PRIVATE pmcp::pmcp)
+```
+
+(or vendor the source with `FetchContent` / `add_subdirectory`).
 
 ## Quick start
 

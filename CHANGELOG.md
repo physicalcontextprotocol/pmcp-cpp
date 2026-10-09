@@ -7,6 +7,24 @@ what is *not* yet proven live in [`pmcp-spec`](https://github.com/physicalcontex
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.0.1] — 2026-10-09
+
+### Fixed
+- **`cmake --install` failed outright.** The install rules referenced
+  `ros2/pmcp_ros2_plugin.xml` and `ros2/launch/pmcp_bridge.launch.py`, but the
+  `ros2/` packaging directory is not in this repository. The plugin.xml rule was
+  not `OPTIONAL`, so `cmake --install` aborted before installing a single file.
+  Both rules are now `OPTIONAL`, matching the fact that ROS 2 packaging lives
+  elsewhere.
+- **`find_package(pmcp)` did not work.** `EXPORT pmcpTargets` was declared on
+  the library but the export set was never installed and no package config was
+  generated, so the README's "with CMake package targets" claim was not true.
+  The export is now installed as `pmcp::pmcp` alongside a generated
+  `pmcpConfig.cmake` / `pmcpConfigVersion.cmake` under `lib/cmake/pmcp`, with a
+  `find_dependency(Threads)`. Downstream projects can now
+  `find_package(pmcp REQUIRED)` and link `pmcp::pmcp`. This is also what a
+  vcpkg/Conan port's config-fixup step requires.
+
 ## [1.0.0] — 2026-10-07
 
 First fully verified release.
