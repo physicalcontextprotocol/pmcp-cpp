@@ -1,0 +1,4 @@
+pmcp provides CMake targets:
+
+    find_package(pmcp CONFIG REQUIRED)
+    target_link_libraries(main PRIVATE pmcp::pmcp)
