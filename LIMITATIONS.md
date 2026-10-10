@@ -1,4 +1,4 @@
-# pmcp-cpp: Verified State & Known Limitations
+# pcp-cpp: Verified State & Known Limitations
 
 This document exists so that every claim this repository makes about itself
 is checkable. If something is not listed under "Verified today", treat it as
@@ -25,10 +25,10 @@ Interop is two-directional and uses the *real* reference SDKs, not mocks:
   tools/list, lease grant + v05 camelCase echo, actuations/call,
   actuations/execute flat result, e-stop engage/block/disengage,
   pcp/metrics conformance shape, resources/read, HTTP 400 on malformed JSON);
-- the real v05 `PCPClient` (`pmcp-python/v05`) driving the C++ server end to
+- the real v05 `PCPClient` (`pcp-python/v05`) driving the C++ server end to
   end (initialize, tools/list, tools/call, lease, resources/read, e-stop
   engage → blocked actuation → clear);
-- the C++ `Client` driving the real `pmcp-python/pcp` server end to end
+- the C++ `Client` driving the real `pcp-python/pcp` server end to end
   (initialize, catalog, shadow/preview, lease, actuation, sensor read,
   e-stop engage → blocked actuation → reset, unknown-actuation error,
   release, ping).
@@ -62,8 +62,8 @@ Interop is two-directional and uses the *real* reference SDKs, not mocks:
   per the spec's open research problems: it requires hardware to close.
 - **Persistence.** The audit log is bounded in memory (`max_audit_entries`)
   and is lost on restart. There is no durable store and no registry seeding.
-- **Sibling-repo drift.** Interop encodes today's `pmcp-python/pcp` and
-  `pmcp-python/v05` behaviour. If those SDKs change their wire shapes, this
+- **Sibling-repo drift.** Interop encodes today's `pcp-python/pcp` and
+  `pcp-python/v05` behaviour. If those SDKs change their wire shapes, this
   repository's tests must be re-run against them; this README's numbers are
   only true for the exact revisions tested at release time.
 
@@ -73,8 +73,8 @@ Interop is two-directional and uses the *real* reference SDKs, not mocks:
 cmake -S . -B build -DPMCP_WITH_ROS2=OFF
 cmake --build build -j
 ./build/pmcp_tests                     # unit
-python3 ../pmcp-python -m pytest -q    # sibling SDK, if present
-python3 tests/interop/test_interop.py  # needs ../pmcp-python importable
+python3 ../pcp-python -m pytest -q    # sibling SDK, if present
+python3 tests/interop/test_interop.py  # needs ../pcp-python importable
   --cpp-server build/pmcp_interop_server \
   --cpp-client build/pmcp_interop_client \
   --pmcp-root ..

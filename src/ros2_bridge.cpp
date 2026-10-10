@@ -1,6 +1,6 @@
 #include "pmcp/ros2_bridge.hpp"
 
-// When built without ROS 2 this file is intentionally almost empty: pmcp-cpp
+// When built without ROS 2 this file is intentionally almost empty: pcp-cpp
 // must build and pass its tests on a machine with no ROS install, which is the
 // situation on macOS. The bridge is additive, never load-bearing.
 
@@ -33,7 +33,7 @@ void Ros2Bridge::attach(Server& server) {
   }
 
   // One Trigger service per actuation, named after the tool. Trigger carries no
-  // arguments, so this covers zero-argument actuations; use P-MCP directly for
+  // arguments, so this covers zero-argument actuations; use PCP directly for
   // parameterized ones.
   for (const auto& name : server.actuation_names_for_bridge()) {
     services_[name] = create_service<std_srvs::srv::Trigger>(
@@ -83,7 +83,7 @@ void Ros2Bridge::on_actuation(const std::string& name,
   try {
     json out = opts_.enforce_safety
                    ? [&] {
-                       // Route through the same pipeline a P-MCP client uses so
+                       // Route through the same pipeline a PCP client uses so
                        // the shadow preview and lease are not bypassed.
                        json res2 = server_->call("actuations/call",
                                                  {{"name", name}, {"arguments", json::object()}});
@@ -106,7 +106,7 @@ void Ros2Bridge::on_estop(const std_srvs::srv::Trigger::Request::SharedPtr /*req
     res->message = "bridge not attached";
     return;
   }
-  // A Trigger call means "stop". Clearing it needs an explicit P-MCP
+  // A Trigger call means "stop". Clearing it needs an explicit PCP
   // pcp/estop_reset, because an accidental second Trigger must not resume a
   // robot that a human stopped.
   auto out = server_->call("pcp/estop", {{"active", true}});

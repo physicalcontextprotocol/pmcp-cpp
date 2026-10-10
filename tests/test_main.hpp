@@ -1,4 +1,4 @@
-// Minimal test harness. No gtest/catch2 dependency — pmcp-cpp has none, and
+// Minimal test harness. No gtest/catch2 dependency — pcp-cpp has none, and
 // pulling one in for a conformance-focused SDK would be gratuitous.
 #pragma once
 

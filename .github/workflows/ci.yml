@@ -1,10 +1,10 @@
-name: pmcp-cpp CI
+name: pcp-cpp CI
 
 # Build, unit tests, and interop for the C++ SDK.
 #
 # Interop caveat, stated plainly: the cross-implementation checks in
-# tests/interop exercise the real pmcp-python SDKs, which live in a sibling
-# repository. This workflow only has pmcp-cpp, so the interop ctest skips
+# tests/interop exercise the real pcp-python SDKs, which live in a sibling
+# repository. This workflow only has pcp-cpp, so the interop ctest skips
 # here (the script exits 77 = ctest SKIP when the siblings or their
 # dependencies are absent). That is not a pass: it proves nothing about
 # cross-implementation behaviour, which is why it is re-run locally on the

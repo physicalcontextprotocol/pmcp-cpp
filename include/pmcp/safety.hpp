@@ -1,4 +1,4 @@
-// pmcp-cpp — safety pipeline.
+// pcp-cpp — safety pipeline.
 //
 // Ordering is fixed and matches the reference SDKs:
 //
@@ -8,7 +8,7 @@
 //   4. Shadow simulation
 //   5. Execution         (caller's code, outside this class)
 //
-// The two Python SDKs disagree on their rule sets — pmcp-python/pcp has
+// The two Python SDKs disagree on their rule sets — pcp-python/pcp has
 // CONST-01..10, v05 has seven named rules (R-ESTOP-01, R-SPEED-01,
 // R-FLOOR-01, R-WS-01, R-ENERGY-01, R-HUMAN-01, R-FORCE-01), and Rust has
 // six. This class implements the union, selected by SafetyProfile, and each
@@ -32,7 +32,7 @@ namespace pmcp {
 
 // Which rule set to enforce.
 enum class SafetyProfile {
-  kDefault,    // CONST-01..10 (pmcp-python/pcp `SafetyMiddleware.default()`)
+  kDefault,    // CONST-01..10 (pcp-python/pcp `SafetyMiddleware.default()`)
   kMinimal,    // CONST-01, CONST-02, CONST-06
   kV05,        // the seven R-* rules from pcp_safety_v5.py
   kArm,        // kDefault + ARM-01..03

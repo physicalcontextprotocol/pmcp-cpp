@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""A real pmcp-python/pcp server for the interop harness.
+"""A real pcp-python/pcp server for the interop harness.
 
 Same registrations as tests/interop/server_main.cpp so the C++ client sees an
 identical catalog whichever side is serving. Everything protocol-shaped comes

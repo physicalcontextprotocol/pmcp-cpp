@@ -419,15 +419,15 @@ json wire_result(Op op, Dialect d, const json& c) {
       json out;
       // protocolVersion is the one field the dialects genuinely conflict on:
       // v05 answers "2024-11-05" (the MCP spec revision) while the spec, both
-      // Python SDKs and pmcp-conformance all assert "0.5".
+      // Python SDKs and pcp-conformance all assert "0.5".
       out["protocolVersion"] =
           d == Dialect::kV05 ? json(std::string(kMcpSpecVersion)) : json(std::string(kPcVersion));
       out["serverInfo"] = {
-          {"name", info.value("name", "pmcp-cpp")},
+          {"name", info.value("name", "pcp-cpp")},
           {"version", info.value("version", "1.0.0")},
           // conformance asserts serverInfo.robotId; v05 asserts serverInfo
           // name/version only.
-          {"robotId", info.value("robot_id", info.value("name", "pmcp-cpp"))},
+          {"robotId", info.value("robot_id", info.value("name", "pcp-cpp"))},
           {"protocolVersion", std::string(kPcVersion)},
       };
       out["capabilities"] = get_or("capabilities", json::object());
@@ -445,8 +445,8 @@ json wire_result(Op op, Dialect d, const json& c) {
       json out{{"pong", true},
                {"ts", secs},
                {"timestamp", static_cast<int64_t>(secs * 1000.0)},
-               {"server", get_or("robot_id", json("pmcp-cpp"))},
-               {"robot_id", get_or("robot_id", json("pmcp-cpp"))},
+               {"server", get_or("robot_id", json("pcp-cpp"))},
+               {"robot_id", get_or("robot_id", json("pcp-cpp"))},
                {"uptime_s", get_or("uptime_s", json(0.0))}};
       return out;
     }
@@ -638,7 +638,7 @@ json wire_result(Op op, Dialect d, const json& c) {
       const bool released = c.value("released", false);
       json out{{"released", released}};
       // Python echoes lease_id back. `lease/release` is spelled identically in
-      // the spec and in pmcp-python, so the dialect cannot be inferred from the
+      // the spec and in pcp-python, so the dialect cannot be inferred from the
       // method name; every reader treats extra keys as ignorable, so always
       // echo it rather than dropping it for the wrong guess.
       if (has("lease_id")) out["lease_id"] = c["lease_id"];

@@ -77,7 +77,7 @@ std::string sha256_hex(const std::string& in) { return detail::sha256_hex(in); }
 }  // namespace
 
 json ShadowPreview::to_canonical() const {
-  // Union of the v05 9-key shape and the pmcp-python/pcp 16-key shape. The
+  // Union of the v05 9-key shape and the pcp-python/pcp 16-key shape. The
   // four schema-v0.6.0 fields (predicted_trajectory, confidence, monitoring,
   // determinism) are left null: neither SDK fabricates them and neither
   // should we.
@@ -105,7 +105,7 @@ json ShadowPreview::to_canonical() const {
 
 Safety::Safety(SafetyProfile profile, SafetyLimits limits)
     : profile_(profile), limits_(limits) {
-  // Rule text mirrors pmcp-python/pcp::SafetyMiddleware so violation strings
+  // Rule text mirrors pcp-python/pcp::SafetyMiddleware so violation strings
   // match that SDK byte-for-byte. v05's rule ids differ; see profile kV05.
   const std::vector<Rule> all = {
       {"CONST-01", "ISO10218", "Speed must not exceed 2.0 m/s"},
@@ -320,7 +320,7 @@ ShadowPreview Safety::preview(const std::string& name, const json& arguments) co
 std::vector<std::string> Safety::run_constitution(const json& a) const {
   std::vector<std::string> v;
   const bool is_v05 = profile_ == SafetyProfile::kV05;
-  // Rules are loaded per profile, exactly as pmcp-python's check_constitution
+  // Rules are loaded per profile, exactly as pcp-python's check_constitution
   // iterates self._rules. A rule that is not in this profile must not fire,
   // otherwise SafetyProfile::kMinimal would be indistinguishable from default.
   auto loaded = [&](const char* id) {
@@ -490,7 +490,7 @@ CheckOutcome Safety::check(const std::string& name, const json& arguments,
   }
 
   // 2. Lease. A lease-required actuation with no token is as bad as a stale
-  //    one: pmcp-python raises LEASE_REQUIRED for both. This sits after the
+  //    one: pcp-python raises LEASE_REQUIRED for both. This sits after the
   //    e-stop latch, so a stopped robot reports the stop, not the lease.
   if (require_lease && lease_token.empty()) {
     std::lock_guard<std::mutex> lock(mtx_);

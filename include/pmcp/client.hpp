@@ -1,8 +1,8 @@
-// pmcp-cpp — client.
+// pcp-cpp — client.
 //
 // Speaks any dialect. Method names are chosen by ClientConfig::dialect and
 // every request goes through the same normalization path a server would use,
-// so the C++ client can drive pmcp-python/pcp, v05, the Rust SDK, or the
+// so the C++ client can drive pcp-python/pcp, v05, the Rust SDK, or the
 // TypeScript SDK without change.
 #pragma once
 
@@ -76,7 +76,7 @@ class Client {
   json metrics();
 
   // shadow -> lease -> call -> release, with the safety outcome checked between
-  // each step. Mirrors pmcp-python's `safe_actuation`, except the lease is held
+  // each step. Mirrors pcp-python's `safe_actuation`, except the lease is held
   // only if you ask (the reference always releases, which silently discards a
   // lease you may have wanted to keep).
   json safe_actuation(const std::string& name, const json& arguments,

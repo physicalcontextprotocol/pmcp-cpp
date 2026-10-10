@@ -1,6 +1,6 @@
-# pmcp-cpp — Physical Context Protocol C++ SDK
+# pcp-cpp — Physical Context Protocol C++ SDK
 
-A C++20 SDK for building Physical Model Context Protocol (P-MCP) servers
+A C++20 SDK for building Physical Context Protocol (PCP) servers
 and clients. It speaks, in one binary, every wire dialect currently
 implemented by the reference SDKs, so a server written against this SDK
 answers `tools/call`, `actuations/call`, and `actuations/execute` — and a
@@ -14,12 +14,12 @@ repository claims. The checked state, re-run at release time:
 | Check | Command | Result |
 |---|---|---|
 | Unit tests | `./build/pmcp_tests` | **72 passed, 0 failed** |
-| Interop (C++ vs real `pmcp-python/pcp` server and client) | `ctest --test-dir build -R pmcp_interop` | **17 checks passed, 0 failed** |
+| Interop (C++ vs real `pcp-python/pcp` server and client) | `ctest --test-dir build -R pmcp_interop` | **17 checks passed, 0 failed** |
 | Build | `cmake -S . -B build -DPMCP_WITH_ROS2=OFF && cmake --build build` | clean, no warnings (Apple Clang 17, gcc in CI) |
 
 Interop covers both directions with the *real* SDKs: raw JSON-RPC against
 the C++ server in all four dialects, the real v05 `PCPClient` class driving
-the C++ server, and the C++ `Client` driving the real `pmcp-python/pcp`
+the C++ server, and the C++ `Client` driving the real `pcp-python/pcp`
 server end to end (lease, shadow preview, actuation, sensor read,
 e-stop engage/block/reset, unknown-actuation error, release, ping).
 
@@ -45,10 +45,10 @@ The four dialects:
 
 | Dialect | Sources | Example methods |
 |---|---|---|
-| `kSpec` | `pmcp-spec/docs/PROTOCOL_SPEC.md` §7 | `actuations/call`, `lease/request`, `pmcp/estop` |
-| `kPython` | `pmcp-python/pcp` | `actuations/call`, `metrics/get`, `pcp/estop` |
-| `kV05` | `pmcp-python/v05`, `pmcp-rust`, `pmcp-typescript` | `tools/call`, `resources/read`, `pcp/estop`, camelCase params |
-| `kConformance` | `pmcp-conformance` | `actuations/execute`, `leases/acquire`, `safety/estop/engage` |
+| `kSpec` | `pcp-spec/docs/PROTOCOL_SPEC.md` §7 | `actuations/call`, `lease/request`, `pmcp/estop` |
+| `kPython` | `pcp-python/pcp` | `actuations/call`, `metrics/get`, `pcp/estop` |
+| `kV05` | `pcp-python/v05`, `pcp-rust`, `pcp-typescript` | `tools/call`, `resources/read`, `pcp/estop`, camelCase params |
+| `kConformance` | `pcp-conformance` | `actuations/execute`, `leases/acquire`, `safety/estop/engage` |
 
 ## Features
 
@@ -141,7 +141,7 @@ with a small simulated arm.
 #include "pmcp/client.hpp"
 
 pmcp::Client::Config cfg;
-cfg.dialect = pmcp::Dialect::kPython;   // speak pmcp-python/pcp's shape
+cfg.dialect = pmcp::Dialect::kPython;   // speak pcp-python/pcp's shape
 pmcp::Client client(cfg);
 client.connect_http("http://127.0.0.1:8080");
 
@@ -161,7 +161,7 @@ not as an error-shaped result.
   shaping per dialect, lease lifecycle, E-stop latching across all four
   dialects, constitution profile enforcement, concurrency under E-stop.
 - `pmcp_interop` — drives the C++ server and client against the real SDKs in
-  the sibling `pmcp-python` repo. When the siblings (or their dependencies)
+  the sibling `pcp-python` repo. When the siblings (or their dependencies)
   are absent it **skips** (exit 77, ctest SKIP) rather than failing or
   silently passing. Cross-SDK coverage is exercised locally before release;
   see LIMITATIONS.md for what CI covers.
@@ -186,5 +186,5 @@ examples/                 simulated arm server + minimal client
 
 ## License
 
-Part of the Physical Model Context Protocol. See the org policy in
-`pmcp-spec` for the canonical license and `SECURITY.md`.
+Part of the Physical Context Protocol. See the org policy in
+`pcp-spec` for the canonical license and `SECURITY.md`.

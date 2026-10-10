@@ -1,8 +1,8 @@
 {
   "name": "pmcp",
   "version": "1.0.1",
-  "description": "Physical Model Context Protocol (P-MCP) C++20 SDK: servers and clients for MCP-compatible robot actuation with a fixed safety pipeline (E-stop latch -> lease -> constitution -> shadow -> execute).",
-  "homepage": "https://github.com/physicalcontextprotocol/pmcp-cpp",
+  "description": "Physical Context Protocol (PCP) C++20 SDK: servers and clients for MCP-compatible robot actuation with a fixed safety pipeline (E-stop latch -> lease -> constitution -> shadow -> execute).",
+  "homepage": "https://github.com/physicalcontextprotocol/pcp-cpp",
   "license": "Apache-2.0",
   "supports": "!uwp",
   "dependencies": [

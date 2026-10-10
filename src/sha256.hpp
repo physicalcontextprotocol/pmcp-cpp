@@ -1,6 +1,6 @@
-// Minimal SHA-256 (FIPS 180-4). Self-contained so pmcp-cpp has no crypto
+// Minimal SHA-256 (FIPS 180-4). Self-contained so pcp-cpp has no crypto
 // dependency; used only to reproduce the constitution fingerprint that
-// pmcp-python computes with hashlib.sha256.
+// pcp-python computes with hashlib.sha256.
 #pragma once
 
 #include <cstdint>

@@ -1,6 +1,6 @@
-// pmcp-cpp — minimal HTTP/1.1 server (internal, POSIX sockets).
+// pcp-cpp — minimal HTTP/1.1 server (internal, POSIX sockets).
 //
-// Deliberately matches pmcp-python/pcp::_run_http rather than a general
+// Deliberately matches pcp-python/pcp::_run_http rather than a general
 // framework: one request per connection, Connection: close, JSON-RPC errors
 // still return HTTP 200, and only a parse failure returns 400. No chunked
 // transfer-encoding support, no keep-alive — the reference server has neither,
@@ -35,7 +35,7 @@ class HttpServer {
   void set_handler(Handler h) { handler_ = std::move(h); }
   // Paths to route. Anything not listed gets 404. The reference server ignores
   // the path entirely; we route but default to "/" being accepted too, because
-  // pmcp-conformance's own rpc_call posts to the bare base URL.
+  // pcp-conformance's own rpc_call posts to the bare base URL.
   void set_paths(std::vector<std::string> p) { paths_ = std::move(p); }
 
   int listen(const std::string& host, int port, int* bound_port) {

@@ -68,7 +68,7 @@ std::string Client::method_for(Op op) const {
 
 std::string Client::endpoint_path() const {
   if (!cfg_.http_path.empty()) return cfg_.http_path;
-  // The spec and pmcp-conformance use /mcp; pmcp-python/pcp uses /pcp; v05
+  // The spec and pcp-conformance use /mcp; pcp-python/pcp uses /pcp; v05
   // serves both. Default to the spec's, since that is the documented endpoint.
   return "/mcp";
 }
@@ -106,7 +106,7 @@ void Client::disconnect() {
 }
 
 std::string Client::next_id() {
-  // 8 hex chars, matching pmcp-python's str(uuid4())[:8] so CONST-08 is
+  // 8 hex chars, matching pcp-python's str(uuid4())[:8] so CONST-08 is
   // satisfied identically on both sides.
   return random_hex(8);
 }
@@ -150,7 +150,7 @@ void Client::notify(const std::string& method, const json& params) {
   try {
     (void)http_post(endpoint_path(), req.dump(-1, ' ', true));
   } catch (...) {
-    // pmcp-python's _notify swallows all exceptions; so do we.
+    // pcp-python's _notify swallows all exceptions; so do we.
   }
 }
 
@@ -282,7 +282,7 @@ json Client::get_prompt(const std::string& name, const json& arguments) {
 json Client::shadow_preview(const std::string& name, const json& arguments) {
   json params{{"arguments", arguments}};
   params["name"] = name;
-  params["actuation_name"] = name;  // pmcp-python prefers this spelling
+  params["actuation_name"] = name;  // pcp-python prefers this spelling
   return rpc(method_for(Op::kShadowPreview), params);
 }
 
@@ -326,7 +326,7 @@ json Client::safe_actuation(const std::string& name, const json& arguments,
   bool safe = true;
   if (preview_res.contains("preview")) {
     const auto& pv = preview_res["preview"];
-    // v05 reports `safe`; pmcp-python reports a `verdict`.
+    // v05 reports `safe`; pcp-python reports a `verdict`.
     if (pv.contains("safe")) safe = pv["safe"].get<bool>();
     else if (pv.contains("verdict")) safe = pv["verdict"] == "PASS";
   }
@@ -357,12 +357,12 @@ json Client::safe_actuation(const std::string& name, const json& arguments,
     if (release_after) (void)release_lease(lease_id);
     return out;
   } catch (...) {
-    // Release on failure too, matching pmcp-python's finally block.
+    // Release on failure too, matching pcp-python's finally block.
     if (release_after) (void)release_lease(lease_id);
     throw;
   }
   // When release_after is false the lease is deliberately retained so a caller
-  // can reuse it across calls — pmcp-python always releases and discards it.
+  // can reuse it across calls — pcp-python always releases and discards it.
 }
 
 }  // namespace pmcp

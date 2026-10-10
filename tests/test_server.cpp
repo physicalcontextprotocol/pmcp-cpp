@@ -212,7 +212,7 @@ PMCP_TEST(lease_lifecycle_is_identical_across_dialects) {
   CHECK(!lid.empty());
 
   // Release in each dialect. lease_id is echoed in every dialect because the
-  // `lease/release` method name is identical in the spec and in pmcp-python,
+  // `lease/release` method name is identical in the spec and in pcp-python,
   // so the dialect cannot be reliably inferred from the method alone.
   auto rel_py = s.call("lease/release", {{"lease_id", lid}});
   CHECK_EQ(rel_py["result"]["released"], json(true));
@@ -464,7 +464,7 @@ PMCP_TEST(http_parse_failure_is_400_while_jsonrpc_errors_stay_200) {
   CHECK_EQ(bad.status, 400);
   CHECK_EQ(json::parse(bad.body)["error"]["code"].get<int>(), -32700);
   CHECK_EQ(json::parse(bad.body)["id"], json(nullptr));
-  // pmcp-python omits CORS on the 400 path; match it.
+  // pcp-python omits CORS on the 400 path; match it.
   CHECK_EQ(bad.allow_origin, false);
 
   // A JSON-RPC-level error is still HTTP 200.

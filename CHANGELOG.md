@@ -1,7 +1,7 @@
-# Changelog — pmcp-cpp
+# Changelog — pcp-cpp
 
 Changes to the C++ SDK. Organization-wide policy and the maintained list of
-what is *not* yet proven live in [`pmcp-spec`](https://github.com/physicalcontextprotocol/pmcp-spec)
+what is *not* yet proven live in [`pcp-spec`](https://github.com/physicalcontextprotocol/pcp-spec)
 — see its `LIMITATIONS.md`.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
@@ -33,7 +33,7 @@ First fully verified release.
 - `pmcp::Server` and `pmcp::Client`, C++20, no dependencies beyond CMake and
   the standard library; JSON is a vendored `pmcp/json.hpp`.
 - Dialect layer (`pmcp/dialect.hpp`) with four wire vocabularies — spec,
-  pmcp-python/pcp, v05 (rust/typescript), and pmcp-conformance — plus a
+  pcp-python/pcp, v05 (rust/typescript), and pcp-conformance — plus a
   canonical internal representation so handlers are written once.
   - Inbound alias resolution accepts every method spelling from every
     dialect regardless of the configured dialect (`Dialect::kAuto`).
@@ -58,7 +58,7 @@ First fully verified release.
   `-DPMCP_WITH_ROS2=ON`; compiles to nothing when off.
 - Test suite: 72 unit tests plus a cross-implementation interop harness that
   drives the C++ server with the real v05 `PCPClient` and the real
-  `pmcp-python/pcp` server with the C++ client. Interop skips (ctest SKIP)
+  `pcp-python/pcp` server with the C++ client. Interop skips (ctest SKIP)
   when the sibling SDKs are absent.
 
 ### Fixed
@@ -76,7 +76,7 @@ First fully verified release.
 
 ### Verified
 - 72/72 unit tests pass; build is warning-free (Apple Clang 17, C++20).
-- Interop: 17/17 checks pass against the real `pmcp-python/pcp` server and
+- Interop: 17/17 checks pass against the real `pcp-python/pcp` server and
   client, covering all four dialects, end-to-end lease + actuation, E-stop
   engage/block/reset, and error handling.
 - macOS host only so far; CI runs the build and unit suite on Ubuntu. The

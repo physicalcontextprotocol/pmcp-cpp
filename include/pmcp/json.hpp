@@ -24762,7 +24762,7 @@ inline void swap(nlohmann::NLOHMANN_BASIC_JSON_TPL& j1, nlohmann::NLOHMANN_BASIC
 
 
 
-// pmcp-cpp vendored nlohmann/json v3.11.3 (single header, MIT licensed).
+// pcp-cpp vendored nlohmann/json v3.11.3 (single header, MIT licensed).
 //
 // The `pmcp::json` alias lives here rather than in error.hpp so that any
 // header needing only the JSON type does not have to drag in the error enum.

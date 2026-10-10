@@ -1,6 +1,6 @@
 # vcpkg port for `pmcp` (draft)
 
-These files are the proposed [vcpkg](https://vcpkg.io) port for `pmcp-cpp`.
+These files are the proposed [vcpkg](https://vcpkg.io) port for `pcp-cpp`.
 They live here for review; to actually make `vcpkg install pmcp` work for
 everyone, they must be merged into [microsoft/vcpkg](https://github.com/microsoft/vcpkg)
 as a PR — a port is only "published" once it is in that registry.
@@ -37,7 +37,7 @@ On each new release, update `vcpkg.json`'s `version` and `portfile.cmake`'s
 `REF`, then recompute the hash:
 
 ```sh
-curl -sL https://github.com/physicalcontextprotocol/pmcp-cpp/archive/refs/tags/vX.Y.Z.tar.gz \
+curl -sL https://github.com/physicalcontextprotocol/pcp-cpp/archive/refs/tags/vX.Y.Z.tar.gz \
   | sha512sum        # or: shasum -a 512
 ```
 
@@ -47,7 +47,7 @@ Paste the digest into `SHA512`, re-run `vcpkg x-add-version pmcp
 ## Testing the port locally before the PR
 
 ```sh
-vcpkg install pmcp --overlay-ports=/path/to/pmcp-cpp/packaging/vcpkg
+vcpkg install pmcp --overlay-ports=/path/to/pcp-cpp/packaging/vcpkg
 ```
 
 ## Alternatives (no PR required)

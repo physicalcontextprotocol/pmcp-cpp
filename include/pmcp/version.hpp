@@ -1,4 +1,4 @@
-// pmcp-cpp — Physical Context Protocol C++ SDK
+// pcp-cpp — Physical Context Protocol C++ SDK
 #pragma once
 
 #include <string_view>

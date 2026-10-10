@@ -1,4 +1,4 @@
-// pmcp-cpp — transports.
+// pcp-cpp — transports.
 //
 // Two transports, matching the reference SDKs byte-for-byte where it matters:
 //   - stdio: newline-delimited JSON, one request per line, one response line.
@@ -42,7 +42,7 @@ class StdioTransport : public Transport {
 };
 
 // Dispatches straight into a callback — no serialization at all. Mirrors
-// pmcp-python's `connect_inprocess`.
+// pcp-python's `connect_inprocess`.
 class InProcessTransport : public Transport {
  public:
   using Handler = std::function<json(const json&)>;

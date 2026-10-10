@@ -1,15 +1,15 @@
-// pmcp-cpp — Physical Context Protocol C++ SDK
+// pcp-cpp — Physical Context Protocol C++ SDK
 //
 // dialect.hpp — the compatibility layer.
 //
-// The P-MCP reference implementations do not agree on the wire. This repo
+// The PCP reference implementations do not agree on the wire. This repo
 // currently contains four distinct vocabularies:
 //
-//   Dialect::kSpec        pmcp-spec/docs/PROTOCOL_SPEC.md §7 (normative table)
-//   Dialect::kPython      pmcp-python/pcp        (actuations/call, metrics/get)
-//   Dialect::kV05         pmcp-python/v05, pmcp-rust, pmcp-typescript
+//   Dialect::kSpec        pcp-spec/docs/PROTOCOL_SPEC.md §7 (normative table)
+//   Dialect::kPython      pcp-python/pcp        (actuations/call, metrics/get)
+//   Dialect::kV05         pcp-python/v05, pcp-rust, pcp-typescript
 //                         (tools/call, resources/read, pcp/estop)
-//   Dialect::kConformance pmcp-conformance       (actuations/execute, leases/acquire)
+//   Dialect::kConformance pcp-conformance       (actuations/execute, leases/acquire)
 //
 // The dialects disagree on three separate axes, so aliasing method names
 // alone is not sufficient:
@@ -41,9 +41,9 @@ namespace pmcp {
 enum class Dialect {
   kAuto,         // accept inbound aliases from every dialect (server default)
   kSpec,         // PROTOCOL_SPEC.md §7
-  kPython,       // pmcp-python/pcp
+  kPython,       // pcp-python/pcp
   kV05,          // v05 + rust + typescript
-  kConformance,  // pmcp-conformance
+  kConformance,  // pcp-conformance
 };
 
 std::string_view dialect_name(Dialect d) noexcept;

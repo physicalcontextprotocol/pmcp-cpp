@@ -81,7 +81,7 @@ PMCP_TEST(method_name_is_the_canonical_spelling_per_dialect) {
 // ---------------------------------------------------------------------------
 
 PMCP_TEST(lease_params_normalize_across_snake_and_camel_case) {
-  // pmcp-python/pcp sends snake_case.
+  // pcp-python/pcp sends snake_case.
   auto snake = canonical_params(Op::kLeaseRequest, "lease/request",
                                 {{"robot_id", "r1"}, {"zone_id", "z"}, {"duration_ms", 5000},
                                  {"bid_energy_j", 42.0}});
@@ -113,7 +113,7 @@ PMCP_TEST(lease_params_normalize_across_snake_and_camel_case) {
 }
 
 PMCP_TEST(actuation_argument_bag_is_named_three_different_ways) {
-  // pmcp-python and v05: `arguments`. conformance: `params`.
+  // pcp-python and v05: `arguments`. conformance: `params`.
   auto a = canonical_params(Op::kCallActuation, "actuations/call",
                             {{"name", "move_to"}, {"arguments", {{"x", 1.0}}}});
   auto b = canonical_params(Op::kCallActuation, "tools/call",
@@ -158,7 +158,7 @@ PMCP_TEST(estop_intent_comes_from_three_different_places) {
   // The conformance dialect encodes it in the method name.
   CHECK_EQ(canonical_params(Op::kEstop, "safety/estop/engage", {})["active"], json(true));
   CHECK_EQ(canonical_params(Op::kEstop, "safety/estop/disengage", {})["active"], json(false));
-  // pmcp-python always engages.
+  // pcp-python always engages.
   CHECK_EQ(canonical_params(Op::kEstop, "pcp/estop", {{"robot_id", "r"}})["active"], json(true));
 }
 
@@ -216,7 +216,7 @@ PMCP_TEST(actuation_result_has_three_structurally_different_shapes) {
              {"final_pose", nullptr}};
 
   auto py = wire_result(Op::kCallActuation, Dialect::kPython, canon);
-  // pmcp-python wraps in a content array typed "actuation".
+  // pcp-python wraps in a content array typed "actuation".
   CHECK_EQ(py["content"][0]["type"], json("actuation"));
   CHECK_EQ(py["content"][0]["data"]["success"], json(true));
   CHECK_EQ(py["isError"], json(false));

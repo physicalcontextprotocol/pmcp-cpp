@@ -1,6 +1,6 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
-    REPO physicalcontextprotocol/pmcp-cpp
+    REPO physicalcontextprotocol/pcp-cpp
     REF "v${VERSION}"
     SHA512 fcea1b97c5cfb4b03690a81abcba47e27073634afb9f78c5616c8dc5840ad8d588d88f577e7c839fff5ea0f336c3d707666f5a5cd90fbe801e92fd00cd187c10
     HEAD_REF main

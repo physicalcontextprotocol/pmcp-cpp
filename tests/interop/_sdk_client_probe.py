@@ -3,7 +3,7 @@
 
 This is the direction a mock cannot cover: v05's own client class, with its own
 method spellings, its own result unwrapping and its own error expectations,
-talking to pmcp-cpp.
+talking to pcp-cpp.
 """
 from __future__ import annotations
 

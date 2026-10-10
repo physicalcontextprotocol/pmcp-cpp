@@ -6,8 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-option(PMCP_BUILD_TESTS "Build pmcp-cpp tests" ON)
-option(PMCP_BUILD_EXAMPLES "Build pmcp-cpp examples" ON)
+option(PMCP_BUILD_TESTS "Build pcp-cpp tests" ON)
+option(PMCP_BUILD_EXAMPLES "Build pcp-cpp examples" ON)
 option(PMCP_WITH_ROS2 "Build the ROS 2 rclcpp bridge (requires a ROS 2 install)" OFF)
 
 # ---------------------------------------------------------------------------
@@ -73,9 +73,9 @@ if(PMCP_WITH_ROS2)
     ${std_srvs_TARGETS}
   )
   target_compile_definitions(pmcp PUBLIC PMCP_WITH_ROS2=1)
-  message(STATUS "pmcp-cpp: ROS 2 bridge ENABLED")
+  message(STATUS "pcp-cpp: ROS 2 bridge ENABLED")
 else()
-  message(STATUS "pmcp-cpp: ROS 2 bridge disabled (configure -DPMCP_WITH_ROS2=ON to enable)")
+  message(STATUS "pcp-cpp: ROS 2 bridge disabled (configure -DPMCP_WITH_ROS2=ON to enable)")
 endif()
 
 # ---------------------------------------------------------------------------
@@ -119,7 +119,7 @@ if(PMCP_BUILD_TESTS)
                      --cpp-client $<TARGET_FILE:pmcp_interop_client>
                      --pmcp-root ${CMAKE_CURRENT_SOURCE_DIR}/..)
     # 77 is CTest's "skipped" convention: the sibling repos or their deps are
-    # absent, which is not a failure of pmcp-cpp.
+    # absent, which is not a failure of pcp-cpp.
     set_tests_properties(pmcp_interop PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 300)
   endif()
 endif()

@@ -31,7 +31,7 @@ std::string random_hex(int n) {
 // Recover a canonical actuation result from whatever shape a nested call came
 // back in. Batch dispatch re-enters handle_message with a method name that may
 // resolve to any dialect, so the inner result can be a flat conformance object,
-// a typed content block (pmcp-python), or a text block holding a JSON string
+// a typed content block (pcp-python), or a text block holding a JSON string
 // (v05).
 json unwrap_actuation_result(const json& response) {
   auto it = response.find("result");
@@ -66,7 +66,7 @@ json json_schema_of(const ActuationSpec& spec) {
   for (const auto& p : spec.parameters) {
     json prop{{"type", p.type}, {"description", p.description}};
     if (!p.unit.empty()) {
-      // pmcp-python uses "x-unit"; v05 emits no unit at all. Emitting both is
+      // pcp-python uses "x-unit"; v05 emits no unit at all. Emitting both is
       // inert for every reader.
       prop["x-unit"] = p.unit;
     }
@@ -80,8 +80,8 @@ json json_schema_of(const ActuationSpec& spec) {
 }
 
 // The superset capability object. The v05 dialect nests each capability under
-// its own key and puts the PCP extensions under experimental.pcp; pmcp-python
-// uses flat names; pmcp-conformance only asserts that an `actuations` or
+// its own key and puts the PCP extensions under experimental.pcp; pcp-python
+// uses flat names; pcp-conformance only asserts that an `actuations` or
 // `features` key exists. Emitting all three families satisfies all of them.
 json default_capabilities() {
   return json{
@@ -90,7 +90,7 @@ json default_capabilities() {
       {"resources", {{"subscribe", false}, {"listChanged", true}}},
       {"prompts", {{"listChanged", false}}},
       {"logging", json::object()},
-      // pmcp-python
+      // pcp-python
       {"actuations", {{"listChanged", true}}},
       {"sensors", {{"streaming", false}}},
       {"shadow", json::object()},
@@ -268,9 +268,9 @@ json Server::status() const {
 json Server::identity() const {
   // Matches RobotIdentity.to_dict(): `class` and `firmware`, not robot_class
   // and firmware_ver.
-  return {{"did", "did:pcp:arm:pmcp-cpp:local:" + random_hex(8)},
+  return {{"did", "did:pcp:arm:pcp-cpp:local:" + random_hex(8)},
           {"class", "arm"},
-          {"model", "pmcp-cpp"},
+          {"model", "pcp-cpp"},
           {"serial", cfg_.robot_id},
           {"firmware", cfg_.version},
           {"location", "local"}};
@@ -502,8 +502,8 @@ json Server::dispatch(Op op, const json& p, const json& id) {
       std::string batch_error;
       for (std::size_t i = 0; i < items.size(); ++i) {
         const auto& it = items[i];
-        // `arguments` is what pmcp-python and v05 call the bag; `params` is
-        // what pmcp-conformance calls it. Take whichever the item carried.
+        // `arguments` is what pcp-python and v05 call the bag; `params` is
+        // what pcp-conformance calls it. Take whichever the item carried.
         const json& args = it.contains("arguments") ? it["arguments"]
                                                     : it.value("params", json::object());
         json inner{{"name", it.value("name", it.value("actuation_name", std::string{}))},
@@ -676,7 +676,7 @@ json Server::dispatch(Op op, const json& p, const json& id) {
            ++i) {
         tail.push_back(entries[i]);
       }
-      // `total` is the unfiltered log length in pmcp-python; keep that.
+      // `total` is the unfiltered log length in pcp-python; keep that.
       return {{"entries", tail}, {"total", static_cast<int>(audit_log_.size())}};
     }
 
@@ -751,7 +751,7 @@ std::optional<json> Server::handle_message(const json& request) {
   Dialect out_dialect = cfg_.dialect;
   if (out_dialect == Dialect::kAuto) {
     out_dialect = dialect_of_method(method).value_or(Dialect::kPython);
-    // `pcp/estop` is declared by pmcp-python (which always engages and answers
+    // `pcp/estop` is declared by pcp-python (which always engages and answers
     // with a nested estop object) and by v05 (which takes {active: bool} and
     // answers with a flat bool). The method name alone cannot tell them apart,
     // but a caller that sends `active` is speaking v05, so answer in v05.
@@ -807,7 +807,7 @@ int Server::serve_stdio(std::istream* in, std::ostream* out) {
   if (!t.connect()) return 1;
   while (auto msg = t.receive()) {
     if (msg->is_object() && msg->contains("__pmcp_parse_error__")) {
-      // pmcp-python/pcp answers an unparseable line with id "" and keeps going.
+      // pcp-python/pcp answers an unparseable line with id "" and keeps going.
       t.send(json{{"jsonrpc", kJsonRpcVersion},
                   {"id", ""},
                   {"error", Error(Code::kParseError, "Parse error").to_json()}});
@@ -841,7 +841,7 @@ HttpResponse Server::handle_http_request(const std::string& /*path*/, const std:
   try {
     req = json::parse(body);
   } catch (const std::exception& e) {
-    // Matches pmcp-python/pcp: HTTP 400, id null, and — note — no
+    // Matches pcp-python/pcp: HTTP 400, id null, and — note — no
     // Access-Control-Allow-Origin on this path.
     r.status = 400;
     r.allow_origin = false;
@@ -853,7 +853,7 @@ HttpResponse Server::handle_http_request(const std::string& /*path*/, const std:
   }
 
   auto resp = handle_message(req);
-  // A notification yields nullopt; pmcp-python/pcp writes {} in that case.
+  // A notification yields nullopt; pcp-python/pcp writes {} in that case.
   r.body = (resp ? *resp : json::object()).dump();
   r.status = 200;
   return r;

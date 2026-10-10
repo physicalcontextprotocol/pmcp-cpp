@@ -1,4 +1,4 @@
-// pmcp-cpp — Physical Context Protocol C++ SDK
+// pcp-cpp — Physical Context Protocol C++ SDK
 //
 // Error codes are the union of the two Python SDK enumerations. Where the
 // SDKs disagree on the *meaning* of a numeric code we keep both names and
@@ -15,7 +15,7 @@ namespace pmcp {
 
 using json = nlohmann::json;
 
-// Numeric codes. `pmcp-python/pcp` stops at -33010 (ZK_PROOF_INVALID);
+// Numeric codes. `pcp-python/pcp` stops at -33010 (ZK_PROOF_INVALID);
 // `v05` extends to -33015. The union is used; which subset a given dialect
 // emits is a wire-compat decision, not a type-system one.
 enum class Code : int {
@@ -26,7 +26,7 @@ enum class Code : int {
   kInvalidParams = -32602,
   kInternalError = -32603,
 
-  // P-MCP physical safety, -33000 range
+  // PCP physical safety, -33000 range
   kShadowBlocked = -33001,
   kConstitutionBlocked = -33002,
   kLeaseRequired = -33003,
@@ -44,7 +44,7 @@ enum class Code : int {
   kRobotFault = -33015,
 };
 
-// Stable string name for a code, as used by pmcp-python/pcp::types.
+// Stable string name for a code, as used by pcp-python/pcp::types.
 std::string_view code_name(Code c) noexcept;
 Code code_from_int(int v) noexcept;
 

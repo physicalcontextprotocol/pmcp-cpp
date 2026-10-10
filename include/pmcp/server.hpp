@@ -1,4 +1,4 @@
-// pmcp-cpp — server.
+// pcp-cpp — server.
 //
 // One implementation, every dialect. Handlers are registered against the
 // canonical Op enum and never against a wire method name; Server::handle_message
@@ -87,14 +87,14 @@ using PromptFn = std::function<json(const json& args)>;
 // ---------------------------------------------------------------------------
 
 struct ServerConfig {
-  std::string name = "pmcp-cpp";
+  std::string name = "pcp-cpp";
   std::string version = "1.0.0";
   std::string robot_id;  // defaults to name
   Dialect dialect = Dialect::kAuto;
   SafetyProfile safety_profile = SafetyProfile::kDefault;
   bool enable_safety = true;
   // HTTP paths to accept. The four dialects disagree here too: the spec says
-  // /mcp, pmcp-python/pcp says /pcp, v05 serves both, and pmcp-conformance's
+  // /mcp, pcp-python/pcp says /pcp, v05 serves both, and pcp-conformance's
   // own helper posts to the bare root in five of its six test files.
   std::vector<std::string> http_paths = {"/pcp", "/mcp", "/"};
   std::size_t max_audit_entries = 10'000;
@@ -135,11 +135,11 @@ class Server {
 
   // ---- transports -------------------------------------------------------
 
-  // Newline-delimited JSON on stdin/stdout, as pmcp-python/pcp and v05 do.
+  // Newline-delimited JSON on stdin/stdout, as pcp-python/pcp and v05 do.
   int serve_stdio(std::istream* in = nullptr, std::ostream* out = nullptr);
 
   // Minimal HTTP/1.1 server: one request per connection, Connection: close,
-  // exactly as pmcp-python/pcp::_run_http. JSON-RPC errors still return 200;
+  // exactly as pcp-python/pcp::_run_http. JSON-RPC errors still return 200;
   // only a parse failure returns 400.
   int serve_http(const std::string& host = "127.0.0.1", int port = 8080);
 

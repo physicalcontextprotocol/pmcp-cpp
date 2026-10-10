@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Cross-implementation interop for pmcp-cpp.
+"""Cross-implementation interop for pcp-cpp.
 
 Two directions, both against real SDK code rather than a mock:
 
-  A. C++ client  ->  pmcp-python/pcp, v05, and the C++ server
+  A. C++ client  ->  pcp-python/pcp, v05, and the C++ server
   B. Python client  ->  the C++ server (using each SDK's own client class)
 
 Anything that cannot run is reported as SKIP, never silently passed. Exits 77
@@ -172,9 +172,9 @@ def run_cpp_client(cpp_client: str, dialect: str, url: str, path: str) -> tuple[
 
 
 def have_python_sdk(root: str) -> tuple[bool, str]:
-    pcp = os.path.join(root, "pmcp-python")
+    pcp = os.path.join(root, "pcp-python")
     if not os.path.isdir(pcp):
-        return False, "pmcp-python not present"
+        return False, "pcp-python not present"
     probe = "import pcp.server, pcp.client; print('ok')"
     try:
         subprocess.run(
@@ -186,7 +186,7 @@ def have_python_sdk(root: str) -> tuple[bool, str]:
             check=True,
         )
     except Exception as exc:  # noqa: BLE001 — report whatever went wrong
-        return False, f"pmcp-python not importable ({exc})"
+        return False, f"pcp-python not importable ({exc})"
     return True, ""
 
 
@@ -195,10 +195,10 @@ def have_python_sdk(root: str) -> tuple[bool, str]:
 # --------------------------------------------------------------------------
 
 def python_sdk_case(root: str, cpp_client: str, label: str) -> None:
-    pcp_root = os.path.join(root, "pmcp-python")
+    pcp_root = os.path.join(root, "pcp-python")
     script = os.path.join(os.path.dirname(os.path.abspath(__file__)), "_sdk_server.py")
     port = free_port()
-    say(f"  -> C++ client vs pmcp-python/pcp ({label})")
+    say(f"  -> C++ client vs pcp-python/pcp ({label})")
     proc = subprocess.Popen(
         [sys.executable, script, "--pcp-root", pcp_root, "--port", str(port)],
         stdout=subprocess.PIPE,
@@ -227,7 +227,7 @@ def python_sdk_case(root: str, cpp_client: str, label: str) -> None:
 
 
 def cpp_server_case(cpp_server: str, root: str, label: str, have_sdk: bool) -> None:
-    say(f"  -> pmcp-python client vs C++ server ({label})")
+    say(f"  -> pcp-python client vs C++ server ({label})")
     with http_server([cpp_server, "--port={PORT}"]) as (proc, url):
         path = wait_http(url, ("/pcp", "/mcp", "/"), proc)
         if path is None:
@@ -303,16 +303,16 @@ def cpp_server_case(cpp_server: str, root: str, label: str, have_sdk: bool) -> N
         R.check(parse_fail, f"malformed JSON returns HTTP 400 ({label})")
 
     # --- real SDK client classes against the C++ server ---
-    pcp_root = os.path.join(root, "pmcp-python")
+    pcp_root = os.path.join(root, "pcp-python")
     probe = os.path.join(os.path.dirname(os.path.abspath(__file__)), "_sdk_client_probe.py")
     if not os.path.isfile(probe):
         R.skip(f"sdk-client->cpp ({label})", "probe script missing")
         return
     # The raw RPC cases above need nothing but the C++ server, so they still
     # run without the sibling SDKs. The real PCPClient probe imports v05 from
-    # pmcp-python and cannot run without it — that is a skip, not a failure.
+    # pcp-python and cannot run without it — that is a skip, not a failure.
     if not have_sdk:
-        R.skip(f"sdk-client->cpp ({label})", "pmcp-python/v05 not present or not importable")
+        R.skip(f"sdk-client->cpp ({label})", "pcp-python/v05 not present or not importable")
         return
     say(f"  -> v05 PCPClient vs C++ server ({label})")
     with http_server([cpp_server, "--port={PORT}"]) as (proc, url):
@@ -342,16 +342,16 @@ def main() -> int:
     ap.add_argument("--only", default=None, help="substring filter over case names")
     args = ap.parse_args()
 
-    print("pmcp-cpp interop\n")
+    print("pcp-cpp interop\n")
 
     ok_sdk, why = have_python_sdk(args.pmcp_root)
     if not ok_sdk:
         R.skip("all cross-SDK cases", why)
     if not args.only or "pcp" in args.only:
-        cpp_server_case(args.cpp_server, args.pmcp_root, "pmcp-python/pcp", ok_sdk)
+        cpp_server_case(args.cpp_server, args.pmcp_root, "pcp-python/pcp", ok_sdk)
     if ok_sdk and (not args.only or "client" in args.only):
         try:
-            python_sdk_case(args.pmcp_root, args.cpp_client, "pmcp-python/pcp")
+            python_sdk_case(args.pmcp_root, args.cpp_client, "pcp-python/pcp")
         except Exception as exc:  # noqa: BLE001
             R.fail("cpp->pcp", str(exc))
 

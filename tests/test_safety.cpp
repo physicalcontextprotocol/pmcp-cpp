@@ -155,7 +155,7 @@ PMCP_TEST(constitution_blocks_motion_below_the_floor) {
 }
 
 PMCP_TEST(constitution_blocks_an_explicit_estop_flag_in_arguments) {
-  // CONST-06 is "the emergency stop bit must be clear". pmcp-python evaluates
+  // CONST-06 is "the emergency stop bit must be clear". pcp-python evaluates
   // bool(payload.get("estop", False)), so a bit that is *set* blocks and a bit
   // that is explicitly clear does not -- carrying the key is not the violation,
   // carrying a set bit is.
@@ -209,7 +209,7 @@ PMCP_TEST(every_profile_reports_a_fingerprint_and_rules) {
                  SafetyProfile::kArm}) {
     Safety s(p);
     CHECK(!s.fingerprint().empty());
-    // pmcp-python computes hashlib.sha256(rule_str).hexdigest()[:16], so the
+    // pcp-python computes hashlib.sha256(rule_str).hexdigest()[:16], so the
     // fingerprint is 16 hex chars, not the full digest.
     CHECK_EQ(s.fingerprint().size(), 16u);
     auto sum = s.constitution_summary("ur5");

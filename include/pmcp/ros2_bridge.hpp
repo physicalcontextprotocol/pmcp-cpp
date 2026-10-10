@@ -1,13 +1,13 @@
-// pmcp-cpp — ROS 2 bridge.
+// pcp-cpp — ROS 2 bridge.
 //
-// Exposes a P-MCP server to the ROS 2 graph and lets ROS 2 callers drive P-MCP
-// actuators. Compiled only when PMCP_WITH_ROS2=ON; the rest of pmcp-cpp has no
+// Exposes a PCP server to the ROS 2 graph and lets ROS 2 callers drive PCP
+// actuators. Compiled only when PMCP_WITH_ROS2=ON; the rest of pcp-cpp has no
 // ROS 2 dependency.
 //
 // Wire it up:
 //   auto node = std::make_shared<pmcp::Ros2Bridge>(options);
-//   node->attach(server);              // ROS topics -> P-MCP tools
-//   Ros2Bridge::publish_status(server); // P-MCP telemetry -> ROS topics
+//   node->attach(server);              // ROS topics -> PCP tools
+//   Ros2Bridge::publish_status(server); // PCP telemetry -> ROS topics
 #pragma once
 
 #include <memory>
@@ -31,14 +31,14 @@ namespace pmcp {
 // relative to the node's namespace, so two bridges can coexist in different
 // cells.
 struct Ros2BridgeOptions {
-  std::string robot_id = "pmcp-cpp";
+  std::string robot_id = "pcp-cpp";
   std::string sensor_topic_prefix = "pcp/sensors";
   std::string actuation_service_prefix = "pcp/actuate";
   std::string status_topic = "pcp/status";
   std::string estop_service = "pcp/estop";
   std::string lease_service = "pcp/lease";
   // When true, every actuation goes through the safety pipeline exactly as a
-  // P-MCP client would, including the shadow preview and lease.
+  // PCP client would, including the shadow preview and lease.
   bool enforce_safety = true;
   double status_period_s = 1.0;
 };
@@ -49,7 +49,7 @@ class Ros2Bridge : public rclcpp::Node {
                       rclcpp::NodeOptions node_options = rclcpp::NodeOptions());
   ~Ros2Bridge() override = default;
 
-  // Attach to a P-MCP server. After this, every registered sensor is published
+  // Attach to a PCP server. After this, every registered sensor is published
   // on <prefix>/<sensor_name> and every actuation is reachable at
   // <actuation_service_prefix>/<actuation_name>. Must be called after the
   // server has its catalog populated.
